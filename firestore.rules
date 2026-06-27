@@ -1,0 +1,162 @@
+// firestore.rules
+// SHATTERFORGE — Production Firestore Security Rules
+// Every collection is DENY ALL by default. Access is granted explicitly.
+// Server-side game logic uses Admin SDK (bypasses these rules).
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── Helpers ────────────────────────────────────────────────────────────
+
+    // Is the request from a signed-in user?
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Is the request from the owner of this document?
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // Does the incoming write only touch allowed fields?
+    function onlyUpdates(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(fields);
+    }
+
+    // Validate a string field is non-empty and under max length
+    function validString(field, max) {
+      return field is string && field.size() > 0 && field.size() <= max;
+    }
+
+    // ─── Players ────────────────────────────────────────────────────────────
+    // /players/{userId}
+    // Players can read any profile. Players can only write their own.
+    // Sensitive fields (coins, elo, hasUpgradedThisLevel) are SERVER-ONLY writes.
+    // Clients may update: name, avatarUrl.
+
+    match /players/{userId} {
+      allow read: if isAuth();
+
+      // Create: only the user themselves, only on first sign-in
+      allow create: if isOwner(userId)
+        && validString(request.resource.data.name, 24)
+        && request.resource.data.coins == 0
+        && request.resource.data.level == 1
+        && request.resource.data.elo == 1000;
+
+      // Update: only the owner, only safe display fields
+      allow update: if isOwner(userId)
+        && onlyUpdates(['name', 'avatarUrl', 'bio']);
+
+      // Delete: never from client
+      allow delete: if false;
+    }
+
+    // ─── Maps (Bases) ────────────────────────────────────────────────────────
+    // /maps/{mapId}
+    // Any authenticated user can read approved maps (for matchmaking).
+    // Owners can create/update their own maps.
+    // isPlayable = true can ONLY be set by the backend validation engine.
+
+    match /maps/{mapId} {
+      allow read: if isAuth();
+
+      allow create: if isOwner(request.resource.data.userId)
+        && request.resource.data.isPlayable == false  // backend sets this
+        && request.resource.data.tileAttributes is map
+        && request.resource.data.row is int
+        && request.resource.data.column is int
+        && request.resource.data.row >= 5
+        && request.resource.data.row <= 20
+        && request.resource.data.column >= 5
+        && request.resource.data.column <= 20;
+
+      // Owners can update layout — isPlayable resets to false until re-validated
+      allow update: if isOwner(resource.data.userId)
+        && request.resource.data.isPlayable == false
+        && onlyUpdates(['tileAttributes', 'row', 'column', 'isPlayable',
+                        'updatedAt']);
+
+      allow delete: if isOwner(resource.data.userId);
+    }
+
+    // ─── Matches ────────────────────────────────────────────────────────────
+    // /matches/{matchId}
+    // Matches are created by the matchmaking backend (Admin SDK).
+    // Players in a match can read it and write only their own result field.
+    // No client may write: winner, eloChange, isComplete.
+
+    match /matches/{matchId} {
+      allow read: if isAuth()
+        && (resource.data.attackerId == request.auth.uid
+            || resource.data.defenderId == request.auth.uid);
+
+      // Clients write only their attack result (damage dealt, balls used, etc.)
+      // Winner calculation is always server-authoritative.
+      allow update: if isAuth()
+        && resource.data.attackerId == request.auth.uid
+        && onlyUpdates(['attackerResult', 'attackerResultSubmittedAt']);
+
+      allow create: if false;  // matchmaking backend only
+      allow delete: if false;
+    }
+
+    // ─── Leaderboard ────────────────────────────────────────────────────────
+    // /leaderboard/{userId}
+    // Public read. Writes only from backend (Admin SDK).
+
+    match /leaderboard/{userId} {
+      allow read: if isAuth();
+      allow write: if false;  // backend only via Admin SDK
+    }
+
+    // ─── Guilds ─────────────────────────────────────────────────────────────
+    // /guilds/{guildId}
+
+    match /guilds/{guildId} {
+      allow read: if isAuth();
+
+      allow create: if isAuth()
+        && request.resource.data.ownerId == request.auth.uid
+        && validString(request.resource.data.name, 32)
+        && request.resource.data.memberCount == 1;
+
+      // Guild owner can update display fields. Member roster managed by backend.
+      allow update: if isAuth()
+        && resource.data.ownerId == request.auth.uid
+        && onlyUpdates(['name', 'description', 'emblem', 'isPublic', 'tag']);
+
+      allow delete: if isAuth() && resource.data.ownerId == request.auth.uid;
+
+      // Guild members subcollection
+      match /members/{memberId} {
+        allow read: if isAuth();
+        allow write: if false;  // backend only
+      }
+    }
+
+    // ─── Replays ────────────────────────────────────────────────────────────
+    // /replays/{replayId}
+    // Created by backend after match. Owner can share (toggle isPublic).
+    // Public replays are readable by all authenticated users.
+
+    match /replays/{replayId} {
+      allow read: if isAuth()
+        && (resource.data.attackerId == request.auth.uid
+            || resource.data.isPublic == true);
+
+      allow update: if isOwner(resource.data.attackerId)
+        && onlyUpdates(['isPublic', 'sharedAt']);
+
+      allow create: if false;  // backend only
+      allow delete: if isOwner(resource.data.attackerId);
+    }
+
+    // ─── Catch-all: deny everything else ────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

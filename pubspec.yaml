@@ -1,0 +1,125 @@
+name: shatterforge
+description: "SHATTERFORGE — AAA physics-destruction multiplayer fortress game."
+publish_to: none
+
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.3 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  flame:                
+  flame_forge2d:          
+  forge2d:                
+
+  
+  flutter_riverpod:      
+  riverpod_annotation:    
+  hooks_riverpod:        
+
+  
+  go_router:           
+
+  
+  firebase_core:
+  firebase_auth: 
+  cloud_firestore: 
+  firebase_storage:      
+  firebase_analytics:     
+  firebase_crashlytics:   
+  firebase_remote_config:  
+
+  
+  dio:                      
+  web_socket_channel:     
+  connectivity_plus: 
+
+  
+  shared_preferences:     
+  hive:                     
+  hive_flutter:            
+  path_provider:          
+
+  
+  flame_audio:          
+  just_audio:          
+  just_audio_background: 
+
+  
+  flutter_animate:        
+  google_fonts: 
+  flutter_colorpicker:    
+  cupertino_icons:
+  cached_network_image: 
+  shimmer:                 
+  lottie:                  
+
+  
+  dartz:                  
+  equatable:             
+  freezed_annotation:     
+  json_annotation:         
+  collection:             
+  uuid:               
+
+  
+  device_info_plus:      
+  package_info_plus:        
+  permission_handler:    
+  flutter_local_notifications:
+  share_plus:         
+
+  
+  flutter_secure_storage: 
+  crypto:           
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints:
+  build_runner:      
+  riverpod_generator: 
+  freezed:              
+  json_serializable:   
+  hive_generator:       
+  mockito:                 
+  flame_test:       
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    
+    - assets/images/
+
+    
+    # - assets/audio/sfx/
+    # - assets/audio/music/
+    # - assets/vfx/particles/
+    # - assets/vfx/animations/
+    # - assets/ui/icons/
+    # - assets/ui/backgrounds/
+    # - assets/data/                 
+
+  fonts:
+    
+    - family: Rajdhani
+      fonts:
+        - asset: assets/fonts/Rajdhani-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Rajdhani-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Rajdhani-Bold.ttf
+          weight: 700
+
+    
+    - family: Orbitron
+      fonts:
+        - asset: assets/fonts/Orbitron-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Orbitron-Bold.ttf
+          weight: 700

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "127745496627",
+    "project_id": "shatter-forge",
+    "storage_bucket": "shatter-forge.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127745496627:android:8d423aa8264ed9a0057546",
+        "android_client_info": {
+          "package_name": "com.example.shatterforge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJQhx1MD03iSVPFlygvgftKrXQWJgxgjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
