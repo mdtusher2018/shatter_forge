@@ -26,18 +26,12 @@ jobs:
         with:
           channel: 'stable'
 
-      # Decode the keystore from base64 and save it to a file
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > $HOME/trainplus-release.keystore
-
-
 
       - name: Install dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release --build-name=1.0.0
+        run: flutter build apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
