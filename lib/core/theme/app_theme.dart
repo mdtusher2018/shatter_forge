@@ -87,7 +87,7 @@ class SFTextStyles {
   // Body text — system sans for readable prose
   static TextStyle body(double size, {Color? color, FontWeight? weight}) =>
       TextStyle(
-        fontFamily: 'Rajdhani',
+   
         fontSize: size,
         color: color ?? SFColors.textSecondary,
         fontWeight: weight ?? FontWeight.w400,
