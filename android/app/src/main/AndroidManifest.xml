@@ -1,7 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.shatterforge"
->
-<uses-permission android:name="android.permission.INTERNET" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:label="shatterforge"
         android:name="${applicationName}"
@@ -46,4 +43,3 @@ package="com.example.shatterforge"
         </intent>
     </queries>
 </manifest>
-

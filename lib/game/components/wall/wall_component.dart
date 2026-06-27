@@ -16,9 +16,7 @@
 //   • No allocations in update() loop.
 
 import 'dart:math' as math;
-
-import 'package:vector_math/vector_math_64.dart' show Vector2;
-import 'package:flame_forge2d/flame_forge2d.dart' hide Vector2;
+import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flutter/material.dart' hide Gradient;
 
 import 'package:shatterforge/domain/entities/map_entity.dart';
