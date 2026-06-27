@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "938837359573",
+    "project_id": "agar-io-clone-8e11a",
+    "storage_bucket": "agar-io-clone-8e11a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938837359573:android:5db670ef5265a78d089b5c",
+        "android_client_info": {
+          "package_name": "com.example.shatterforge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxapou89pL-VYiUz0uv8P2-rlMxeT8ph4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

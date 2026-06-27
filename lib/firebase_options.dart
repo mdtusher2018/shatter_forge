@@ -51,13 +51,12 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDJQhx1MD03iSVPFlygvgftKrXQWJgxgjs',
-    appId: '1:127745496627:android:8d423aa8264ed9a0057546',
-    messagingSenderId: '127745496627',
-    projectId: 'shatter-forge',
-    storageBucket: 'shatter-forge.appspot.com',
+    apiKey: 'AIzaSyDxapou89pL-VYiUz0uv8P2-rlMxeT8ph4',
+    appId: '1:938837359573:android:5db670ef5265a78d089b5c',
+    messagingSenderId: '938837359573',
+    projectId: 'agar-io-clone-8e11a',
+    storageBucket: 'agar-io-clone-8e11a.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDk4aoSo1tSyHFJPimbfSTojUjGJCYQgCQ',
     appId: '1:127745496627:ios:c2611c86f7fb5e65057546',
