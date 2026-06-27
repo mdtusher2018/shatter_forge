@@ -1,0 +1,48 @@
+name: Flutter - Android Build apk
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+
+      # Set up Flutter
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # Decode the keystore from base64 and save it to a file
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > $HOME/trainplus-release.keystore
+
+
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release --build-name=1.0.0
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-flutter-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+        
